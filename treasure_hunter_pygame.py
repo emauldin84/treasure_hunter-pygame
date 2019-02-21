@@ -1,4 +1,8 @@
 import pygame
+import sys
+import random
+
+pygame.font.init()
 
 KEY_UP = 273
 KEY_DOWN = 274
@@ -19,12 +23,24 @@ class Hunter(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load('hunter.png').convert_alpha()
         self.rect = self.image.get_rect()
-
         self.rect.center = (x, y)
         self.x = x
         self.y = y
         self.speed_x = 50
         self.speed_y = 50
+
+class Treasure(pygame.sprite.Sprite):
+    def __init__(self, x_treasure, y_treasure):
+        pygame.sprite.Sprite.__init__(self)
+        self.x_treasure = x_treasure # generate random x coordinate
+        self.y_treasure = y_treasure # generate random y coordinate
+
+treasure_coordinates = [-25, 125, 275, 425, 575]
+y_treasure = random.choice(treasure_coordinates)
+x_treasure = random.choice(treasure_coordinates)
+treasure = Treasure(x_treasure, y_treasure)
+
+
 
 def main():
     pygame.init()
@@ -34,15 +50,13 @@ def main():
     fps = 50
     bg = pygame.image.load('map.jpg')
 
-
-    
-
     player = Hunter(100, 100) # determines player start location
-    
 
     player_group = pygame.sprite.Group()
     player_group.add(player)
-       
+    treasure_group = pygame.sprite.Group()
+    treasure_group.add(treasure)
+    print(x_treasure, y_treasure)
     while True:
         
         for event in pygame.event.get():
@@ -58,10 +72,15 @@ def main():
                 if event.key == KEY_RIGHT and player.rect.x < 574:
                     player.rect.x += 150
                 print(player.rect.x, player.rect.y)
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == KEY_D:
                 
             
             if event.type == pygame.QUIT:
                 return False
+
+        
 
 
         screen.blit(bg, (-50,-50)) #pygame.image.load('../images/background.png').convert_alpha()
@@ -82,9 +101,9 @@ def main():
         pygame.display.update()
         clock.tick(fps)
         
-        font = pygame.font.Font(None, 25)
-        text = font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", True, (0, 0, 0))
-        screen.blit(text, (80, 750))
+        font = pygame.font.SysFont(None, 25)
+        text = font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", False, (0, 0, 0))
+        screen.blit(text, (80, 400))
 
     pygame.quit()
 
