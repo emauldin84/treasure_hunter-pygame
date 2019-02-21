@@ -42,28 +42,29 @@ def main():
 
     player_group = pygame.sprite.Group()
     player_group.add(player)
-
-    
+       
     while True:
         
         for event in pygame.event.get():
             # Event handling
             key = pygame.key.get_pressed()
             if event.type == pygame.KEYDOWN:
-                if event.key == KEY_DOWN:
-                    player.rect.y += 50
-                elif event.key == KEY_UP:
-                    player.rect.y -= 50
-                elif event.key == KEY_LEFT:
-                    player.rect.x -= 50
-                elif event.key == KEY_RIGHT:
-                    player.rect.x += 50
+                if event.key == KEY_DOWN and player.rect.y < 574:
+                    player.rect.y += 150
+                if event.key == KEY_UP and player.rect.y > -24:
+                    player.rect.y -= 150
+                if event.key == KEY_LEFT and player.rect.x > -24:
+                    player.rect.x -= 150
+                if event.key == KEY_RIGHT and player.rect.x < 574:
+                    player.rect.x += 150
+                print(player.rect.x, player.rect.y)
+                
             
             if event.type == pygame.QUIT:
                 return False
 
 
-        screen.blit(bg, (0,0)) #pygame.image.load('../images/background.png').convert_alpha()
+        screen.blit(bg, (-50,-50)) #pygame.image.load('../images/background.png').convert_alpha()
 
         # first parameter takes a single sprite
         # second parameter takes sprite groups
@@ -82,7 +83,7 @@ def main():
         clock.tick(fps)
         
         font = pygame.font.Font(None, 25)
-        text = font.render('Use arrow keys to move the Hunter', True, (0, 0, 0))
+        text = font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", True, (0, 0, 0))
         screen.blit(text, (80, 750))
 
     pygame.quit()
