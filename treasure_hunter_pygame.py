@@ -11,6 +11,8 @@ KEY_RIGHT = 275
 D_Key = pygame.K_d
 dig_length = 50
 
+
+
 class Block(pygame.sprite.Sprite):
     def __init__(self, pos):
         pygame.sprite.Sprite.__init__(self)
@@ -62,8 +64,11 @@ def main():
     treasure_group.add(treasure)
     print(x_treasure, y_treasure)
 
+    
     font = pygame.font.SysFont(None, 32)
     text = font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", True, (0, 0, 0))
+    shovel_vitals = 10
+    shovel_health = font.render("Shovel Health: %d" % (shovel_vitals), True, (0, 0, 0))
     found_treasure_message = font.render("Treasure Hunter has found the Treasure! You win!", True, (0, 0, 0))
     nothing_there_message = font.render("Nothing there! Keep hunting.", True, (0, 0, 0))
     dig_counter = dig_length
@@ -88,9 +93,11 @@ def main():
                 if event.key == D_Key:
                     sound.play()
                     dig_counter = 0
+                    shovel_vitals = 10
                     player.image = pygame.image.load('hunter-dig.png').convert_alpha()
                     # append hole coordinates to hole list
                     hole_list.append([player.rect.x, player.rect.y])
+                    shovel_vitals -= 2
                     if (player.rect.x, player.rect.y) == (x_treasure, y_treasure):
                         screen.blit(found_treasure_message, (30, 300))
                     else:
@@ -105,7 +112,6 @@ def main():
         # draw everything in hole list
         # print(hole_list)    
         for i in hole_list:
-            
             screen.blit(hole, (i[0], i[1]))
         
 
@@ -119,7 +125,8 @@ def main():
 
         player_group.draw(screen)
         # wall_group.draw(screen)
-        screen.blit(text, (10, 10))
+        screen.blit(text, (50, 10))
+        screen.blit(shovel_health, (50, 30))
         pygame.display.update()
         clock.tick(fps)
         
