@@ -8,7 +8,8 @@ KEY_UP = 273
 KEY_DOWN = 274
 KEY_LEFT = 276
 KEY_RIGHT = 275
-
+D_Key = pygame.K_d
+dig_length = 50
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, pos):
@@ -49,6 +50,9 @@ def main():
     clock = pygame.time.Clock()
     fps = 50
     bg = pygame.image.load('map.jpg')
+    pygame.mixer.init()
+    sound = pygame.mixer.Sound('Shovel.wav')
+    hole = pygame.image.load('hole.png').convert_alpha()
 
     player = Hunter(100, 100) # determines player start location
 
@@ -60,8 +64,13 @@ def main():
 
     font = pygame.font.SysFont(None, 32)
     text = font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", True, (0, 0, 0))
+    found_treasure_message = font.render("Treasure Hunter has found the Treasure! You win!", True, (0, 0, 0))
+    nothing_there_message = font.render("Nothing there! Keep hunting.", True, (0, 0, 0))
+    dig_counter = dig_length
+    hole_list = []
+    
     while True:
-        
+        screen.blit(bg, (-50,-50))
         for event in pygame.event.get():
             # Event handling
             key = pygame.key.get_pressed()
@@ -76,28 +85,36 @@ def main():
                     player.rect.x += 150
                 print(player.rect.x, player.rect.y)
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_d:
+                if event.key == D_Key:
+                    sound.play()
+                    dig_counter = 0
+                    player.image = pygame.image.load('hunter-dig.png').convert_alpha()
+                    # append hole coordinates to hole list
+                    hole_list.append([player.rect.x, player.rect.y])
                     if (player.rect.x, player.rect.y) == (x_treasure, y_treasure):
-                        print("Treasure Hunter has found the Treasure! You win!")
+                        screen.blit(found_treasure_message, (30, 300))
+                    else:
+                        screen.blit(nothing_there_message, (30, 300))
+                
                 
             
             if event.type == pygame.QUIT:
                 return False
 
         
+        # draw everything in hole list
+        # print(hole_list)    
+        for i in hole_list:
+            
+            screen.blit(hole, (i[0], i[1]))
+        
 
-
-        screen.blit(bg, (-50,-50)) #pygame.image.load('../images/background.png').convert_alpha()
-
-        # first parameter takes a single sprite
-        # second parameter takes sprite groups
-        # third parameter is a do kill commad if true
-        # all group objects colliding with the first parameter object will be
-        # destroyed. The first parameter could be bullets and the second one
-        # targets although the bullet is not destroyed but can be done with
-        # simple trick bellow
-        # hit = pygame.sprite.spritecollide(player, wall_group, True)
+        # increment dig_counter by 1
+        dig_counter += 1
+        if dig_counter > dig_length:
+            player.image = pygame.image.load('hunter.png').convert_alpha()
+        else:
+            player.image = pygame.image.load('hunter-dig.png').convert_alpha()
 
 
         player_group.draw(screen)
