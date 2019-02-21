@@ -57,6 +57,9 @@ def main():
     treasure_group = pygame.sprite.Group()
     treasure_group.add(treasure)
     print(x_treasure, y_treasure)
+
+    font = pygame.font.SysFont(None, 32)
+    text = font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", True, (0, 0, 0))
     while True:
         
         for event in pygame.event.get():
@@ -74,7 +77,9 @@ def main():
                 print(player.rect.x, player.rect.y)
 
             if event.type == pygame.KEYDOWN:
-                if event.key == KEY_D:
+                if event.key == pygame.K_d:
+                    if (player.rect.x, player.rect.y) == (x_treasure, y_treasure):
+                        print("Treasure Hunter has found the Treasure! You win!")
                 
             
             if event.type == pygame.QUIT:
@@ -97,13 +102,12 @@ def main():
 
         player_group.draw(screen)
         # wall_group.draw(screen)
-
+        screen.blit(text, (10, 10))
         pygame.display.update()
         clock.tick(fps)
         
-        font = pygame.font.SysFont(None, 25)
-        text = font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", False, (0, 0, 0))
-        screen.blit(text, (80, 400))
+    
+        
 
     pygame.quit()
 
