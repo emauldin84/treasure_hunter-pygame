@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import time
 
 pygame.font.init()
 
@@ -9,7 +10,7 @@ KEY_DOWN = 274
 KEY_LEFT = 276
 KEY_RIGHT = 275
 D_Key = pygame.K_d
-dig_length = 50
+dig_length = 30
 
 
 
@@ -69,15 +70,22 @@ def main():
     text = font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", True, (0, 0, 0))
     shovel_vitals = 10
     shovel_health = font.render("Shovel Health: %d" % (shovel_vitals), True, (0, 0, 0))
+    current_status = ()
+    game_play_message = font.render("%s" % (current_status,), True, (0, 0, 0))
     found_treasure_message = font.render("Treasure Hunter has found the Treasure! You win!", True, (0, 0, 0))
     nothing_there_message = font.render("Nothing there! Keep hunting.", True, (0, 0, 0))
     dig_counter = dig_length
     hole_list = []
+    dig_result = ()
+    shovel_vitals = 10
+    
+    
     
     while True:
         screen.blit(bg, (-50,-50))
         for event in pygame.event.get():
             # Event handling
+            
             key = pygame.key.get_pressed()
             if event.type == pygame.KEYDOWN:
                 if event.key == KEY_DOWN and player.rect.y < 574:
@@ -93,15 +101,14 @@ def main():
                 if event.key == D_Key:
                     sound.play()
                     dig_counter = 0
-                    shovel_vitals = 10
                     player.image = pygame.image.load('hunter-dig.png').convert_alpha()
                     # append hole coordinates to hole list
                     hole_list.append([player.rect.x, player.rect.y])
                     shovel_vitals -= 2
                     if (player.rect.x, player.rect.y) == (x_treasure, y_treasure):
-                        screen.blit(found_treasure_message, (30, 300))
+                        dig_result = True
                     else:
-                        screen.blit(nothing_there_message, (30, 300))
+                        dig_result = False
                 
                 
             
@@ -114,6 +121,10 @@ def main():
         for i in hole_list:
             screen.blit(hole, (i[0], i[1]))
         
+       
+            
+            
+        
 
         # increment dig_counter by 1
         dig_counter += 1
@@ -121,6 +132,15 @@ def main():
             player.image = pygame.image.load('hunter.png').convert_alpha()
         else:
             player.image = pygame.image.load('hunter-dig.png').convert_alpha()
+            if dig_result == False:
+                current_status = screen.blit(nothing_there_message, (50, 50))
+            
+         # draw dig result to screen
+        
+        if dig_result == True:
+            current_status = screen.blit(found_treasure_message, (50, 50))
+            
+            
 
 
         player_group.draw(screen)
