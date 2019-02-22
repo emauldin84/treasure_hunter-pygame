@@ -138,7 +138,12 @@ def main():
             
         # draw dig result to screen
         if dig_result == True:
-            current_status = screen.blit(found_treasure_message, (50, 50))
+            current_status = screen.blit(found_treasure_message, (220, 350))
+            screen.blit(you_lose_message_2, (190, 370))
+            if event.key == Y_Key:
+                main()
+            elif event.key == N_Key:
+                pygame.quit()
 
         # decrement shovel_vitals by 2 on each False dig result
         
