@@ -57,6 +57,8 @@ def main():
     bg = pygame.image.load('map.jpg')
     pygame.mixer.init()
     sound = pygame.mixer.Sound('Shovel.wav')
+    victory_sound = pygame.mixer.Sound('victory_fanfare.wav')
+    victory_sound.set_volume(.2)
     music = pygame.mixer.music.load("Galesburg.mp3")
     pygame.mixer.music.set_endevent(pygame.constants.USEREVENT)
     pygame.mixer.music.set_volume(.5)
@@ -79,7 +81,7 @@ def main():
     game_play_message = font.render("%s" % (current_status,), True, (0, 0, 0))
     found_treasure_message = font.render("Treasure Hunter has found the Treasure! You win!", True, (0, 0, 0))
     you_lose_message_1 = font.render("Your shovel has broken. You lose!", True, (0, 0, 0))
-    you_lose_message_2 = font.render("Press 'Y' to start try again. Press 'N' to quit.", True, (0, 0, 0))
+    play_again_message = font.render("Press 'Y' to start try again. Press 'N' to quit.", True, (0, 0, 0))
     nothing_there_message = font.render("Nothing there! Keep hunting.", True, (0, 0, 0))
     dig_counter = dig_length
     hole_list = []
@@ -140,11 +142,13 @@ def main():
             
         # draw dig result to screen
         if dig_result == True:
+            pygame.mixer.music.fadeout(1000)
+            victory_sound.play()
             current_status = screen.blit(found_treasure_message, (220, 350))
-            screen.blit(you_lose_message_2, (190, 370))
-            if event.key == Y_Key:
+            screen.blit(play_again_message, (190, 370))
+            if hasattr(event, 'key') and event.key == Y_Key:
                 main()
-            elif event.key == N_Key:
+            elif hasattr(event, 'key') and event.key == N_Key:
                 pygame.quit()
 
         # decrement shovel_vitals by 2 on each False dig result
@@ -153,7 +157,7 @@ def main():
         if shovel_vitals == 0:
             key = pygame.key.get_pressed()
             screen.blit(you_lose_message_1, (220, 350))
-            screen.blit(you_lose_message_2, (190, 370))
+            screen.blit(play_again_message, (190, 370))
             if hasattr(event, 'key') and event.key == Y_Key:
                 main()
             elif hasattr(event, 'key') and event.key == N_Key:
