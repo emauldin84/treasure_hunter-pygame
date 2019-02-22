@@ -4,6 +4,7 @@ import random
 import time
 
 pygame.font.init()
+pygame.font.get_fonts()
 
 KEY_UP = 273
 KEY_DOWN = 274
@@ -53,6 +54,14 @@ def main():
     clock = pygame.time.Clock()
     fps = 50
     bg = pygame.image.load('map.jpg')
+    
+    font_background = pygame.Surface((800, 46), pygame.SRCALPHA)
+    font_background.fill((255, 255, 255, 128))
+
+    end_game_background = pygame.Surface((535, 50), pygame.SRCALPHA)
+    end_game_background.fill((255, 255, 255, 128))
+    
+    
     pygame.mixer.init()
     sound = pygame.mixer.Sound('Shovel.wav')
     shovel_breaks = pygame.mixer.Sound('LTTP_Shatter.wav')
@@ -77,19 +86,20 @@ def main():
     print(x_treasure, y_treasure)
 
     
-    font = pygame.font.SysFont(None, 32)
-    title_font = pygame.font.SysFont(None, 44)
-    instructions_font = pygame.font.SysFont(None, 24)
-    nothing_there_font = pygame.font.SysFont(None, 30)
+    font = pygame.font.Font(None, 32)
+    title_font = pygame.font.Font("Open_Sans/OpenSans-Bold.ttf", 30)
+    instructions_font = pygame.font.Font(None, 24)
+    nothing_there_font = pygame.font.Font(None, 32)
     title = title_font.render("Treasure Hunter", True, (0, 0, 0))
     instructions = instructions_font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", True, (0, 0, 0))
+    
     shovel_vitals = 10
     current_status = ()
     game_play_message = font.render("%s" % (current_status,), True, (0, 0, 0))
     found_treasure_message = font.render("Treasure Hunter has found the Treasure! You win!", True, (0, 0, 0))
     you_lose_message_1 = font.render("Your shovel has broken. You lose!", True, (0, 0, 0))
     play_again_message = font.render("Press 'Y' to start try again. Press 'N' to quit.", True, (0, 0, 0))
-    nothing_there_message = nothing_there_font.render("Nothing there! Keep hunting.", True, (0, 0, 0))
+    nothing_there_message = nothing_there_font.render("Nothing there!", True, (0, 0, 0))
     dig_counter = dig_length
     hole_list = []
     dig_result = ()
@@ -97,6 +107,8 @@ def main():
     
     while True:
         screen.blit(bg, (-50,-50))
+        screen.blit(font_background, (0,0))
+        screen.blit(font_background, (0,775))
         shovel_health_display = font.render("Shovel Health: %d" % (shovel_vitals), True, (0, 0, 0))
 
         for event in pygame.event.get():
@@ -133,8 +145,8 @@ def main():
                         shovel_breaks.play()   
                         
             
-            if event.type == pygame.QUIT:
-                return False
+        if event.type == pygame.QUIT:
+            return False
 
         
         # draw everything in hole list
@@ -153,13 +165,15 @@ def main():
             
         # draw dig result to screen
         if dig_result == True:
-            
+            screen.blit(end_game_background, (150,345))
             current_status = screen.blit(found_treasure_message, (160, 350))
             screen.blit(play_again_message, (190, 370))
             if hasattr(event, 'key') and event.key == Y_Key:
                 main()
             elif hasattr(event, 'key') and event.key == N_Key:
                 pygame.quit()
+            
+            
 
         # decrement shovel_vitals by 2 on each False dig result
         
@@ -167,22 +181,22 @@ def main():
         if shovel_vitals == 0:
             pygame.mixer.music.set_volume(.2)
             key = pygame.key.get_pressed()
-            screen.blit(you_lose_message_1, (220, 350))
+            screen.blit(end_game_background, (150,345))
+            screen.blit(you_lose_message_1, (250, 350))
             screen.blit(play_again_message, (190, 370))
             if hasattr(event, 'key') and event.key == Y_Key:
                 main()
             elif hasattr(event, 'key') and event.key == N_Key:
                 pygame.quit()
+            
 
         player_group.draw(screen)
-        screen.blit(title, (300, 10))
+        
+        screen.blit(title, (280, 0))
         screen.blit(instructions, (175, 780))
         screen.blit(shovel_health_display, (600, 12))
         pygame.display.update()
         clock.tick(fps)
-        
-    
-        
 
     pygame.quit()
 
