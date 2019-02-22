@@ -55,7 +55,7 @@ def main():
     bg = pygame.image.load('map.jpg')
     pygame.mixer.init()
     sound = pygame.mixer.Sound('Shovel.wav')
-    music = pygame.mixer.music.load("04 - Galesburg.mp3")
+    music = pygame.mixer.music.load("Galesburg.mp3")
     pygame.mixer.music.set_endevent(pygame.constants.USEREVENT)
     pygame.mixer.music.set_volume(.5)
     pygame.mixer.music.play()
