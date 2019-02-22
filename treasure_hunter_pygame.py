@@ -90,7 +90,7 @@ def main():
     
     while True:
         screen.blit(bg, (-50,-50))
-        shovel_health_display = font.render("Shovel Health: %d" % (shovel_vitals), True, (0, 0, 0))
+        shovel_health_display = font.render("Shovel Health: %d" % (shovel_vitals), True, (0, 0, 0), gcolor = "white")
 
         for event in pygame.event.get():
             # Event handling
