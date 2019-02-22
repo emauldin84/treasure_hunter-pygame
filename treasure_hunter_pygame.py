@@ -59,7 +59,7 @@ def main():
     sound = pygame.mixer.Sound('Shovel.wav')
     music = pygame.mixer.music.load("Galesburg.mp3")
     pygame.mixer.music.set_endevent(pygame.constants.USEREVENT)
-    pygame.mixer.music.set_volume(.0)
+    pygame.mixer.music.set_volume(.5)
     pygame.mixer.music.play()
     hole = pygame.image.load('hole.png').convert_alpha()
 
@@ -75,7 +75,6 @@ def main():
     font = pygame.font.SysFont(None, 32)
     text = font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", True, (0, 0, 0))
     shovel_vitals = 10
-    shovel_health_display = font.render("Shovel Health: %d" % (shovel_vitals), True, (0, 0, 0))
     current_status = ()
     game_play_message = font.render("%s" % (current_status,), True, (0, 0, 0))
     found_treasure_message = font.render("Treasure Hunter has found the Treasure! You win!", True, (0, 0, 0))
@@ -89,6 +88,8 @@ def main():
     
     while True:
         screen.blit(bg, (-50,-50))
+        shovel_health_display = font.render("Shovel Health: %d" % (shovel_vitals), True, (0, 0, 0))
+
         for event in pygame.event.get():
             # Event handling
             key = pygame.key.get_pressed()
@@ -113,9 +114,10 @@ def main():
                     if (player.rect.x, player.rect.y) == (x_treasure, y_treasure):
                         dig_result = True
                     else:
-                        dig_result = False
                         shovel_vitals -= 2
                         print(shovel_vitals)
+                        dig_result = False
+                        
                         
             
             if event.type == pygame.QUIT:
@@ -152,9 +154,9 @@ def main():
             key = pygame.key.get_pressed()
             screen.blit(you_lose_message_1, (220, 350))
             screen.blit(you_lose_message_2, (190, 370))
-            if event.key == Y_Key:
+            if hasattr(event, 'key') and event.key == Y_Key:
                 main()
-            elif event.key == N_Key:
+            elif hasattr(event, 'key') and event.key == N_Key:
                 pygame.quit()
 
         player_group.draw(screen)
