@@ -55,9 +55,10 @@ def main():
     bg = pygame.image.load('map.jpg')
     pygame.mixer.init()
     sound = pygame.mixer.Sound('Shovel.wav')
-    victory_sound = pygame.mixer.Sound('victory_fanfare.wav')
-    victory_sound.set_volume(.2)
-    music = pygame.mixer.music.load("Galesburg.mp3")
+    shovel_breaks = pygame.mixer.Sound('LTTP_Shatter.wav')
+    victory_sound = pygame.mixer.Sound('WW_Fanfare_Pearl.wav')
+    victory_sound.set_volume(.5)
+    music = pygame.mixer.music.load("Hollow Knight OST - Dung Defender.mp3")
     pygame.mixer.music.set_endevent(pygame.constants.USEREVENT)
     pygame.mixer.music.set_volume(.5)
     pygame.mixer.music.play()
@@ -121,13 +122,15 @@ def main():
                     
                     if (player.rect.x, player.rect.y) == (x_treasure, y_treasure):
                         dig_result = True
-                        pygame.mixer.music.fadeout(1000)
+                        pygame.mixer.music.set_volume(.2)
                         victory_sound.play()
                     else:
                         shovel_vitals -= 2
                         print(shovel_vitals)
                         dig_result = False
-                        
+                    if shovel_vitals == 0:
+                        sound.set_volume(.0)
+                        shovel_breaks.play()   
                         
             
             if event.type == pygame.QUIT:
@@ -151,7 +154,7 @@ def main():
         # draw dig result to screen
         if dig_result == True:
             
-            current_status = screen.blit(found_treasure_message, (220, 350))
+            current_status = screen.blit(found_treasure_message, (160, 350))
             screen.blit(play_again_message, (190, 370))
             if hasattr(event, 'key') and event.key == Y_Key:
                 main()
@@ -162,6 +165,7 @@ def main():
         
         # print you_lose_message to screen when shovel_vitals == 0
         if shovel_vitals == 0:
+            pygame.mixer.music.set_volume(.2)
             key = pygame.key.get_pressed()
             screen.blit(you_lose_message_1, (220, 350))
             screen.blit(play_again_message, (190, 370))
