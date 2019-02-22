@@ -10,6 +10,8 @@ KEY_DOWN = 274
 KEY_LEFT = 276
 KEY_RIGHT = 275
 D_Key = pygame.K_d
+Y_Key = pygame.K_y
+N_Key = pygame.K_n
 dig_length = 30
 
 
@@ -57,7 +59,7 @@ def main():
     sound = pygame.mixer.Sound('Shovel.wav')
     music = pygame.mixer.music.load("Galesburg.mp3")
     pygame.mixer.music.set_endevent(pygame.constants.USEREVENT)
-    pygame.mixer.music.set_volume(.5)
+    pygame.mixer.music.set_volume(.0)
     pygame.mixer.music.play()
     hole = pygame.image.load('hole.png').convert_alpha()
 
@@ -73,23 +75,22 @@ def main():
     font = pygame.font.SysFont(None, 32)
     text = font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", True, (0, 0, 0))
     shovel_vitals = 10
-    shovel_health = font.render("Shovel Health: %d" % (shovel_vitals), True, (0, 0, 0))
+    shovel_health_display = font.render("Shovel Health: %d" % (shovel_vitals), True, (0, 0, 0))
     current_status = ()
     game_play_message = font.render("%s" % (current_status,), True, (0, 0, 0))
     found_treasure_message = font.render("Treasure Hunter has found the Treasure! You win!", True, (0, 0, 0))
+    you_lose_message_1 = font.render("Your shovel has broken. You lose!", True, (0, 0, 0))
+    you_lose_message_2 = font.render("Press 'Y' to start try again. Press 'N' to quit.", True, (0, 0, 0))
     nothing_there_message = font.render("Nothing there! Keep hunting.", True, (0, 0, 0))
     dig_counter = dig_length
     hole_list = []
     dig_result = ()
-    shovel_vitals = 10
-    
     
     
     while True:
         screen.blit(bg, (-50,-50))
         for event in pygame.event.get():
             # Event handling
-            
             key = pygame.key.get_pressed()
             if event.type == pygame.KEYDOWN:
                 if event.key == KEY_DOWN and player.rect.y < 574:
@@ -108,13 +109,14 @@ def main():
                     player.image = pygame.image.load('hunter-dig.png').convert_alpha()
                     # append hole coordinates to hole list
                     hole_list.append([player.rect.x, player.rect.y])
-                    shovel_vitals -= 2
+                    
                     if (player.rect.x, player.rect.y) == (x_treasure, y_treasure):
                         dig_result = True
                     else:
                         dig_result = False
-                
-                
+                        shovel_vitals -= 2
+                        print(shovel_vitals)
+                        
             
             if event.type == pygame.QUIT:
                 return False
@@ -124,11 +126,6 @@ def main():
         # print(hole_list)    
         for i in hole_list:
             screen.blit(hole, (i[0], i[1]))
-        
-       
-            
-            
-        
 
         # increment dig_counter by 1
         dig_counter += 1
@@ -139,18 +136,25 @@ def main():
             if dig_result == False:
                 current_status = screen.blit(nothing_there_message, (50, 50))
             
-         # draw dig result to screen
-        
+        # draw dig result to screen
         if dig_result == True:
             current_status = screen.blit(found_treasure_message, (50, 50))
-            
-            
 
+        # decrement shovel_vitals by 2 on each False dig result
+        
+        # print you_lose_message to screen when shovel_vitals == 0
+        if shovel_vitals == 0:
+            key = pygame.key.get_pressed()
+            screen.blit(you_lose_message_1, (220, 350))
+            screen.blit(you_lose_message_2, (190, 370))
+            if event.key == Y_Key:
+                main()
+            elif event.key == N_Key:
+                pygame.quit()
 
         player_group.draw(screen)
-        # wall_group.draw(screen)
         screen.blit(text, (50, 10))
-        screen.blit(shovel_health, (50, 30))
+        screen.blit(shovel_health_display, (50, 30))
         pygame.display.update()
         clock.tick(fps)
         
