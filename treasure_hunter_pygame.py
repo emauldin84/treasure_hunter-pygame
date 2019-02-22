@@ -2,6 +2,7 @@ import pygame
 import sys
 import random
 import time
+from pygame.locals import *
 
 pygame.font.init()
 pygame.font.get_fonts()
@@ -42,10 +43,6 @@ class Treasure(pygame.sprite.Sprite):
         self.x_treasure = x_treasure # generate random x coordinate
         self.y_treasure = y_treasure # generate random y coordinate
 
-
-
-
-
 def main():
     
     pygame.init()
@@ -60,7 +57,6 @@ def main():
 
     end_game_background = pygame.Surface((535, 50), pygame.SRCALPHA)
     end_game_background.fill((255, 255, 255, 128))
-    
     
     pygame.mixer.init()
     sound = pygame.mixer.Sound('Shovel.wav')
@@ -168,6 +164,8 @@ def main():
             screen.blit(end_game_background, (150,345))
             current_status = screen.blit(found_treasure_message, (160, 350))
             screen.blit(play_again_message, (190, 370))
+            pygame.event.clear()
+            event = pygame.event.wait()
             if hasattr(event, 'key') and event.key == Y_Key:
                 main()
             elif hasattr(event, 'key') and event.key == N_Key:
@@ -184,6 +182,8 @@ def main():
             screen.blit(end_game_background, (150,345))
             screen.blit(you_lose_message_1, (250, 350))
             screen.blit(play_again_message, (190, 370))
+            pygame.event.clear()
+            event = pygame.event.wait()
             if hasattr(event, 'key') and event.key == Y_Key:
                 main()
             elif hasattr(event, 'key') and event.key == N_Key:
