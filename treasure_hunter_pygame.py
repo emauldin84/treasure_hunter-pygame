@@ -115,6 +115,8 @@ def main():
                     
                     if (player.rect.x, player.rect.y) == (x_treasure, y_treasure):
                         dig_result = True
+                        pygame.mixer.music.fadeout(1000)
+                        victory_sound.play()
                     else:
                         shovel_vitals -= 2
                         print(shovel_vitals)
@@ -142,8 +144,7 @@ def main():
             
         # draw dig result to screen
         if dig_result == True:
-            pygame.mixer.music.fadeout(1000)
-            victory_sound.play()
+            
             current_status = screen.blit(found_treasure_message, (220, 350))
             screen.blit(play_again_message, (190, 370))
             if hasattr(event, 'key') and event.key == Y_Key:
