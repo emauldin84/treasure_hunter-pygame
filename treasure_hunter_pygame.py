@@ -55,8 +55,11 @@ def main():
     font_background = pygame.Surface((800, 46), pygame.SRCALPHA)
     font_background.fill((0, 0, 0, 128))
 
-    end_game_background = pygame.Surface((535, 50), pygame.SRCALPHA)
+    end_game_background = pygame.Surface((535, 300), pygame.SRCALPHA)
     end_game_background.fill((0, 0, 0, 128))
+
+    broken_shovel = pygame.image.load('broken-shovel.png').convert_alpha()
+    treasure_chest = pygame.image.load('treasure_chest.png').convert_alpha()
     
     pygame.mixer.init()
     sound = pygame.mixer.Sound('Shovel.wav')
@@ -165,6 +168,7 @@ def main():
             screen.blit(end_game_background, (150,345))
             current_status = screen.blit(found_treasure_message, (160, 350))
             screen.blit(play_again_message, (190, 370))
+            screen.blit(treasure_chest, (300, 420))
             pygame.event.clear()
             event = pygame.event.wait()
             if hasattr(event, 'key') and event.key == Y_Key:
@@ -183,6 +187,7 @@ def main():
             screen.blit(end_game_background, (150,345))
             screen.blit(you_lose_message_1, (250, 350))
             screen.blit(play_again_message, (190, 370))
+            screen.blit(broken_shovel, (210, 400))
             pygame.event.clear()
             event = pygame.event.wait()
             if hasattr(event, 'key') and event.key == Y_Key:
