@@ -53,10 +53,10 @@ def main():
     bg = pygame.image.load('map.jpg')
     
     font_background = pygame.Surface((800, 46), pygame.SRCALPHA)
-    font_background.fill((255, 255, 255, 128))
+    font_background.fill((0, 0, 0, 128))
 
     end_game_background = pygame.Surface((535, 50), pygame.SRCALPHA)
-    end_game_background.fill((255, 255, 255, 128))
+    end_game_background.fill((0, 0, 0, 128))
     
     pygame.mixer.init()
     sound = pygame.mixer.Sound('Shovel.wav')
@@ -86,16 +86,16 @@ def main():
     title_font = pygame.font.Font("Open_Sans/OpenSans-Bold.ttf", 30)
     instructions_font = pygame.font.Font(None, 24)
     nothing_there_font = pygame.font.Font(None, 32)
-    title = title_font.render("Treasure Hunter", True, (0, 0, 0))
-    instructions = instructions_font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", True, (0, 0, 0))
+    title = title_font.render("Treasure Hunter", True, (255, 255, 255))
+    instructions = instructions_font.render("Use arrow keys to move the Hunter & 'D' to dig for treasure.", True, (255, 255, 255))
     
-    shovel_vitals = 10
+    shovel_vitals = 12
     current_status = ()
-    game_play_message = font.render("%s" % (current_status,), True, (0, 0, 0))
-    found_treasure_message = font.render("Treasure Hunter has found the Treasure! You win!", True, (0, 0, 0))
-    you_lose_message_1 = font.render("Your shovel has broken. You lose!", True, (0, 0, 0))
-    play_again_message = font.render("Press 'Y' to start try again. Press 'N' to quit.", True, (0, 0, 0))
-    nothing_there_message = nothing_there_font.render("Nothing there!", True, (0, 0, 0))
+    game_play_message = font.render("%s" % (current_status,), True, (255, 255, 255))
+    found_treasure_message = font.render("Treasure Hunter has found the Treasure! You win!", True, (255, 255, 255))
+    you_lose_message_1 = font.render("Your shovel has broken. You lose!", True, (255, 255, 255))
+    play_again_message = font.render("Press 'Y' to start try again. Press 'N' to quit.", True, (255, 255, 255))
+    nothing_there_message = nothing_there_font.render("Nothing there!", True, (255, 255, 255))
     dig_counter = dig_length
     hole_list = []
     dig_result = ()
@@ -105,7 +105,7 @@ def main():
         screen.blit(bg, (-50,-50))
         screen.blit(font_background, (0,0))
         screen.blit(font_background, (0,775))
-        shovel_health_display = font.render("Shovel Health: %d" % (shovel_vitals), True, (0, 0, 0))
+        shovel_health_display = font.render("Shovel Health: %d" % (shovel_vitals), True, (255, 255, 255))
 
         for event in pygame.event.get():
             # Event handling
@@ -139,7 +139,6 @@ def main():
                     if shovel_vitals == 0:
                         sound.set_volume(.0)
                         shovel_breaks.play()   
-                        
             
         if event.type == pygame.QUIT:
             return False
@@ -158,7 +157,9 @@ def main():
             player.image = pygame.image.load('hunter-dig.png').convert_alpha()
             if dig_result == False:
                 current_status = screen.blit(nothing_there_message, (12, 12))
-            
+        
+        player_group.draw(screen)
+
         # draw dig result to screen
         if dig_result == True:
             screen.blit(end_game_background, (150,345))
@@ -189,9 +190,8 @@ def main():
             elif hasattr(event, 'key') and event.key == N_Key:
                 pygame.quit()
             
-
-        player_group.draw(screen)
-        
+            
+        # player_group.draw(screen)
         screen.blit(title, (280, 0))
         screen.blit(instructions, (175, 780))
         screen.blit(shovel_health_display, (600, 12))
