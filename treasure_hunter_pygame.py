@@ -85,7 +85,7 @@ def main():
     x_treasure = random.choice(treasure_coordinates)
     treasure = Treasure(x_treasure, y_treasure)
 
-    # treasure_coordinates.remove(x_treasure)
+    treasure_coordinates.remove(x_treasure)
     
     x_shovel = random.choice(treasure_coordinates)
     y_shovel = random.choice(treasure_coordinates)
@@ -157,8 +157,6 @@ def main():
                         dig_result = True
                         pygame.mixer.music.set_volume(.2)
                         victory_sound.play()
-                    
-                        
                     else:
                         shovel_vitals -= 2
                         print(shovel_vitals)
@@ -168,7 +166,8 @@ def main():
                         shovel_breaks.play()
                     if (player.rect.x, player.rect.y) == (x_shovel, y_shovel):
                         found_shovel = True
-                        pygame.mixer.music.set_volume(.2)
+                        x_shovel = 0
+                        y_shovel = 0
                         found_shovel_sound.play() 
             
         if event.type == pygame.QUIT:
@@ -193,7 +192,6 @@ def main():
         
         if found_shovel == True:
             shovel_vitals = 12
-            new_shovel = Shovel(0, 0)
             screen.blit(end_game_background, (150, 345))
             current_status = screen.blit(found_shovel_message, (190, 350))
             screen.blit(continue_message, (290, 370))
@@ -205,6 +203,7 @@ def main():
         
         # draw dig result to screen
         if dig_result == True:
+            pygame.mixer.music.set_volume(.2)
             screen.blit(end_game_background, (150, 345))
             current_status = screen.blit(found_treasure_message, (160, 350))
             screen.blit(play_again_message, (190, 370))
