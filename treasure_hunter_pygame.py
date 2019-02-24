@@ -50,7 +50,7 @@ def main():
     screen = pygame.display.set_mode(size)
     clock = pygame.time.Clock()
     fps = 50
-    bg = pygame.image.load('map.jpg')
+    bg = pygame.image.load('desert_tileset1.jpg')
     
     font_background = pygame.Surface((800, 46), pygame.SRCALPHA)
     font_background.fill((0, 0, 0, 128))
@@ -105,7 +105,7 @@ def main():
     
     
     while True:
-        screen.blit(bg, (-50,-50))
+        screen.blit(bg, (-1000,-1000))
         screen.blit(font_background, (0,0))
         screen.blit(font_background, (0,775))
         shovel_health_display = font.render("Shovel Health: %d" % (shovel_vitals), True, (255, 255, 255))
