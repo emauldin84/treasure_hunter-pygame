@@ -14,7 +14,7 @@ KEY_RIGHT = 275
 D_Key = pygame.K_d
 Y_Key = pygame.K_y
 N_Key = pygame.K_n
-dig_length = 30
+dig_length = 20
 
 
 
@@ -100,8 +100,8 @@ def main():
     treasure_group.add(treasure)
     shovel_group = pygame.sprite.Group()
     shovel_group.add(new_shovel)
-    print("Treasure is located at:", x_treasure, y_treasure)
-    print("New Shovel is located at:", x_shovel, y_shovel)
+    print("Treasure:", x_treasure, y_treasure)
+    print("New Shovel:", x_shovel, y_shovel)
 
     
     font = pygame.font.Font(None, 32)
@@ -158,6 +158,7 @@ def main():
                         pygame.mixer.music.set_volume(.2)
                         victory_sound.play()
                     else:
+                        # decrement shovel_vitals by 2 on each False dig result
                         shovel_vitals -= 2
                         print(shovel_vitals)
                         dig_result = False
@@ -215,8 +216,6 @@ def main():
             elif hasattr(event, 'key') and event.key == N_Key:
                 pygame.quit()
             
-
-        # decrement shovel_vitals by 2 on each False dig result
         
         # print you_lose_message to screen when shovel_vitals == 0
         if shovel_vitals == 0:
